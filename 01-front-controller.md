@@ -17,7 +17,7 @@ So instead of doing that, create a folder in your project folder called `public`
 Inside the `public` folder you can now create your `index.php`. Remember that you don't want to expose anything here, so put just the following code in there:
 
 ```php
-<?php declare(strict_types = 1); 
+<?php declare(strict_types=1); 
 
 require __DIR__ . '/../src/Bootstrap.php';
 ```
@@ -33,12 +33,12 @@ The rest of the public folder is reserved for your public asset files (like Java
 Now navigate inside your `src` folder and create a new `Bootstrap.php` file with the following content:
 
 ```php
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 echo 'Hello World!';
 ```
 
-Now let's see if everything is set up correctly. Open up a console and navigate into your projects `public` folder. In there type `php -S localhost:8000` and press enter. This will start the built-in webserver and you can access your page in a browser with `http://localhost:8000`. You should now see the 'hello world' message.
+Now let's see if everything is set up correctly. Open up a console and navigate into your projects `public` folder. In there type `php -S 0.0.0.0:1234` and press enter. This will start the built-in webserver and you can access your page in a browser with `http://localhost:1234`. You should now see the 'hello world' message.
 
 If there is an error, go back and try to fix it. If you only see a blank page, check the console window where the server is running for errors.
 
