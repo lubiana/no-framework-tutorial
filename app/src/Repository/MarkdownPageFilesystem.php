@@ -31,7 +31,7 @@ final class MarkdownPageFilesystem implements MarkdownPageRepo
         $fileNames = glob($this->dataPath . '*.md');
         assert(is_array($fileNames));
         return array_map(function (string $name): MarkdownPage {
-            usleep(100000);
+            usleep(rand(200, 500) * 1000);
             $content = file_get_contents($name);
             $name = str_replace($this->dataPath, '', $name);
             $name = str_replace('.md', '', $name);
@@ -59,5 +59,10 @@ final class MarkdownPageFilesystem implements MarkdownPageRepo
             throw new NotFound;
         }
         return $filtered[0];
+    }
+
+    public function save(MarkdownPage $page): MarkdownPage
+    {
+        return $page;
     }
 }

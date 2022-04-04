@@ -18,8 +18,9 @@ final class SettingsContainerProvider implements ContainerProvider
         $builder = new ContainerBuilder;
         $settings = $this->settingsProvider->getSettings();
         $dependencies = require $settings->dependenciesFile;
-        $dependencies[Settings::class] = fn (): Settings => $settings;
+        $dependencies[Settings::class] = $settings;
         $builder->addDefinitions($dependencies);
+       // $builder->enableCompilation('/tmp');
         return $builder->build();
     }
 }

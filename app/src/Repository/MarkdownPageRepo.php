@@ -14,4 +14,6 @@ interface MarkdownPageRepo
     public function byId(int $id): MarkdownPage;
 
     public function byTitle(string $title): MarkdownPage;
+
+    public function save(MarkdownPage $page): MarkdownPage;
 }

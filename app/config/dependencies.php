@@ -1,8 +1,10 @@
 <?php declare(strict_types=1);
 
+use Doctrine\ORM\EntityManagerInterface;
 use FastRoute\Dispatcher;
 use Laminas\Diactoros\ResponseFactory;
 use Lubian\NoFramework\Factory\DiactorosRequestFactory;
+use Lubian\NoFramework\Factory\DoctrineEm;
 use Lubian\NoFramework\Factory\PipelineProvider;
 use Lubian\NoFramework\Factory\RequestFactory;
 use Lubian\NoFramework\Http\BasicEmitter;
@@ -12,6 +14,7 @@ use Lubian\NoFramework\Http\Pipeline;
 use Lubian\NoFramework\Http\RoutedRequestHandler;
 use Lubian\NoFramework\Http\RouteMiddleware;
 use Lubian\NoFramework\Repository\CachedMarkdownPageRepo;
+use Lubian\NoFramework\Repository\DoctrineMarkdownPageRepo;
 use Lubian\NoFramework\Repository\MarkdownPageFilesystem;
 use Lubian\NoFramework\Repository\MarkdownPageRepo;
 use Lubian\NoFramework\Service\Time\Now;
@@ -31,21 +34,25 @@ use Symfony\Contracts\Cache\CacheInterface;
 use function FastRoute\simpleDispatcher;
 
 return [
+    // alias
+    Now::class => fn (SystemClockNow $n) => $n,
+    ResponseFactoryInterface::class => fn (ResponseFactory $rf) => $rf,
+    Emitter::class => fn (BasicEmitter $e) => $e,
+    MiddlewareInterface::class => fn (RouteMiddleware $r) => $r,
+    RoutedRequestHandler::class => fn (InvokerRoutedHandler $h) => $h,
+    RequestFactory::class => fn (DiactorosRequestFactory $rf) => $rf,
+    CacheInterface::class => fn (FilesystemAdapter $a) => $a,
+    MarkdownPageRepo::class => fn (CachedMarkdownPageRepo $r) => $r,
+
+    // Factories
     ResponseInterface::class => fn (ResponseFactory $rf) => $rf->createResponse(),
     ServerRequestInterface::class => fn (RequestFactory $rf) => $rf->fromGlobals(),
-    Now::class => fn (SystemClockNow $n) => $n,
     Renderer::class => fn (Mustache_Engine $e) => new MustacheRenderer($e),
     MLF::class => fn (Settings $s) => new MLF($s->templateDir, ['extension' => $s->templateExtension]),
     ME::class => fn (MLF $mfl) => new ME(['loader' => $mfl]),
-    ResponseFactoryInterface::class => fn (ResponseFactory $rf) => $rf,
-    Emitter::class => fn (BasicEmitter $e) => $e,
-    RoutedRequestHandler::class => fn (InvokerRoutedHandler $h) => $h,
-    MiddlewareInterface::class => fn (RouteMiddleware $r) => $r,
     Dispatcher::class => fn () => simpleDispatcher(require __DIR__ . '/routes.php'),
-    RequestFactory::class => fn (DiactorosRequestFactory $rf) => $rf,
     Pipeline::class => fn (PipelineProvider $p) => $p->getPipeline(),
-    CacheInterface::class => fn (FilesystemAdapter $a) => $a,
     MarkdownPageFilesystem::class => fn (Settings $s) => new MarkdownPageFilesystem($s->pagesPath),
-    CachedMarkdownPageRepo::class => fn (CacheInterface $c, MarkdownPageFilesystem $r) => new CachedMarkdownPageRepo($c, $r),
-    MarkdownPageRepo::class => fn (MarkdownPageFilesystem $r) => $r,
+    CachedMarkdownPageRepo::class => fn (CacheInterface $c, MarkdownPageFilesystem $r, Settings $s) => new CachedMarkdownPageRepo($c, $r, $s),
+    EntityManagerInterface::class => fn (DoctrineEm $f) => $f->create(),
 ];

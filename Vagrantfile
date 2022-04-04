@@ -17,6 +17,5 @@ Vagrant.configure("2") do |config|
     echo -e 'zend_extension=xdebug\nxdebug.client_host=10.0.2.2\n' >> /etc/php/conf.d/tutorial.ini
     echo -e 'xdebug.client_port=9003\nxdebug.mode=debug\n' >> /etc/php/conf.d/tutorial.ini
     echo -e 'zend.assertions=1\n' >> /etc/php/conf.d/tutorial.ini
-
   SHELL
 end
