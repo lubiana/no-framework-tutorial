@@ -97,10 +97,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 interface RoutedRequestHandler extends RequestHandlerInterface
 {
-    /**
-     * sets the Name of the ServerRequest attribute where the route
-     * information should be stored.
-     */
     public function setRouteAttributeName(string $routeAttributeName = '__route_handler'): void;
 }
 ```

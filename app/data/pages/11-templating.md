@@ -49,11 +49,7 @@ namespace Lubian\NoFramework\Template;
 
 interface Renderer
 {
-    /**
-     * @param string $template
-     * @param array<string, mixed> $data
-     * @return string
-     */
+    /** @param array<string, mixed> $data */
     public function render(string $template, array $data = []) : string;
 }
 ```

@@ -172,7 +172,6 @@ return [
 ```
 
 Now we can change our Bootstrap.php file to use the new Factories for the creation of the Initial Objects:
-require __DIR__ . '/../vendor/autoload.php';
 
 ```php
 ...

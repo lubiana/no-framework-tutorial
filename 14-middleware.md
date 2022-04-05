@@ -153,8 +153,6 @@ class ContainerPipeline implements Pipeline
 {
     /**
      * @param array<MiddlewareInterface|class-string> $middlewares
-     * @param RequestHandlerInterface $tip
-     * @param ContainerInterface $container
      */
     public function __construct(
         private array $middlewares,
@@ -294,5 +292,12 @@ public function handle(ServerRequestInterface $request): ResponseInterface
 Lets try if you can make the kernel work with our created Pipeline implementation. For the future we could improve our
 pipeline a little bit, so that it can accept a class-string of a middleware and resolves that with the help of a
 dependency container, if you want you can do that as well.
+
+**A quick note about docblocks:** You might have noticed, that I rarely add docblocks to my the code in the examples, and
+when I do it seems kind of random. My philosophy is that I only add docblocks when there is no way to automatically get
+the exact type from the code itself. For me docblocks only serve two purposes: help my IDE to understand what it choices
+it has for code completion and to help the static analysis to better understand the code. There is a great blogpost
+about the [cost and value of DocBlocks](https://localheinz.com/blog/2018/05/06/cost-and-value-of-docblocks/), although it
+is written in 2018 at a time before PHP 7.4 was around everything written there is still valid today.
 
 [<< previous](12-refactoring.md) | [next >>](15-adding-content.md)

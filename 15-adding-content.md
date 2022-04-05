@@ -114,6 +114,10 @@ those are simply displayed using an unordered list.
     <meta charset="UTF-8">
     <title>{{title}}</title>
     <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.classless.min.css">
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script> 
 </head>
 <body>
 <main>
@@ -129,7 +133,8 @@ html and thereby destroys the the parsed markdown.
 
 You might have spotted that I added [Pico.css](https://picocss.com/) which is just a very small css framework to make the
 pages a little bit nicer to look at. It mostly provides some typography styles that work great with rendered Markdown,
-but you can leave that out or use any other css framework you like.
+but you can leave that out or use any other css framework you like. There is also some Javascript that adds syntax
+highlighting to the code.
 
 After you have taken care of the templating side we can now create an new Action class with two methods to display use
 our markdown files and the templates to create the pages. As we have two templates I propose to use Two methods in our
