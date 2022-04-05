@@ -1,4 +1,4 @@
-[<< previous](12-refactoring.md) | [next >>](14-invoker.md)
+[<< previous](12-refactoring.md) | [next >>](15-adding-content.md)
 
 ### Middleware
 
@@ -295,4 +295,4 @@ Lets try if you can make the kernel work with our created Pipeline implementatio
 pipeline a little bit, so that it can accept a class-string of a middleware and resolves that with the help of a
 dependency container, if you want you can do that as well.
 
-[<< previous](12-refactoring.md) | [next >>](14-invoker.md)
+[<< previous](12-refactoring.md) | [next >>](15-adding-content.md)

@@ -19,13 +19,12 @@ final class CacheMiddleware implements MiddlewareInterface
         private CacheInterface $cache,
         private Response\Serializer $serializer,
         private Settings $settings,
-    )
-    {
+    ) {
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        if ($request->getMethod() === 'GET' && !$this->settings->isDev()) {
+        if ($request->getMethod() === 'GET' && ! $this->settings->isDev()) {
             $key = (string) $request->getUri();
             $key = base64_encode($key);
             $callback = fn () => $handler->handle($request);

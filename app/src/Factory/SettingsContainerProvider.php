@@ -20,7 +20,7 @@ final class SettingsContainerProvider implements ContainerProvider
         $dependencies = require $settings->dependenciesFile;
         $dependencies[Settings::class] = $settings;
         $builder->addDefinitions($dependencies);
-       // $builder->enableCompilation('/tmp');
+        // $builder->enableCompilation('/tmp');
         return $builder->build();
     }
 }

@@ -13,6 +13,7 @@ use function count;
 use function file_get_contents;
 use function glob;
 use function is_array;
+use function random_int;
 use function str_replace;
 use function substr;
 use function usleep;
@@ -31,7 +32,7 @@ final class MarkdownPageFilesystem implements MarkdownPageRepo
         $fileNames = glob($this->dataPath . '*.md');
         assert(is_array($fileNames));
         return array_map(function (string $name): MarkdownPage {
-            usleep(rand(200, 500) * 1000);
+            usleep(random_int(200, 500) * 1000);
             $content = file_get_contents($name);
             $name = str_replace($this->dataPath, '', $name);
             $name = str_replace('.md', '', $name);

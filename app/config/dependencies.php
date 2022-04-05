@@ -14,13 +14,14 @@ use Lubian\NoFramework\Http\Pipeline;
 use Lubian\NoFramework\Http\RoutedRequestHandler;
 use Lubian\NoFramework\Http\RouteMiddleware;
 use Lubian\NoFramework\Repository\CachedMarkdownPageRepo;
-use Lubian\NoFramework\Repository\DoctrineMarkdownPageRepo;
 use Lubian\NoFramework\Repository\MarkdownPageFilesystem;
 use Lubian\NoFramework\Repository\MarkdownPageRepo;
 use Lubian\NoFramework\Service\Time\Now;
 use Lubian\NoFramework\Service\Time\SystemClockNow;
 use Lubian\NoFramework\Settings;
+use Lubian\NoFramework\Template\MarkdownParser;
 use Lubian\NoFramework\Template\MustacheRenderer;
+use Lubian\NoFramework\Template\ParsedownParser;
 use Lubian\NoFramework\Template\Renderer;
 use Mustache_Engine as ME;
 use Mustache_Loader_FilesystemLoader as MLF;
@@ -43,6 +44,7 @@ return [
     RequestFactory::class => fn (DiactorosRequestFactory $rf) => $rf,
     CacheInterface::class => fn (FilesystemAdapter $a) => $a,
     MarkdownPageRepo::class => fn (CachedMarkdownPageRepo $r) => $r,
+    MarkdownParser::class => fn (ParsedownParser $p) => $p,
 
     // Factories
     ResponseInterface::class => fn (ResponseFactory $rf) => $rf->createResponse(),

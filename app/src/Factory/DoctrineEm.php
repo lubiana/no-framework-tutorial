@@ -1,7 +1,4 @@
-<?php
-
-declare(strict_types=1);
-
+<?php declare(strict_types=1);
 
 namespace Lubian\NoFramework\Factory;
 
@@ -13,7 +10,10 @@ use Lubian\NoFramework\Settings;
 
 final class DoctrineEm
 {
-    public function __construct(private Settings $settings){}
+    public function __construct(private Settings $settings)
+    {
+    }
+
     public function create(): EntityManagerInterface
     {
         $config = Setup::createConfiguration($this->settings->doctrine['devMode']);

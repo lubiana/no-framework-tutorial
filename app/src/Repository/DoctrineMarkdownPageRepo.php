@@ -1,7 +1,4 @@
-<?php
-
-declare(strict_types=1);
-
+<?php declare(strict_types=1);
 
 namespace Lubian\NoFramework\Repository;
 
@@ -10,15 +7,17 @@ use Doctrine\ORM\EntityRepository;
 use Lubian\NoFramework\Exception\NotFound;
 use Lubian\NoFramework\Model\MarkdownPage;
 
+use function random_int;
+use function usleep;
+
 final class DoctrineMarkdownPageRepo implements MarkdownPageRepo
 {
-    /**
-     * @var EntityRepository<MarkdownPage>
-     */
+    /** @var EntityRepository<MarkdownPage> */
     private EntityRepository $repo;
+
     public function __construct(
         private EntityManagerInterface $entityManager
-    ){
+    ) {
         $this->repo = $this->entityManager->getRepository(MarkdownPage::class);
     }
 
@@ -27,15 +26,15 @@ final class DoctrineMarkdownPageRepo implements MarkdownPageRepo
      */
     public function all(): array
     {
-        usleep(rand(500, 1500) * 1000);
+        usleep(random_int(500, 1500) * 1000);
         return $this->repo->findAll();
     }
 
     public function byId(int $id): MarkdownPage
     {
-        usleep(rand(500, 1500) * 1000);
+        usleep(random_int(500, 1500) * 1000);
         $page = $this->repo->findOneBy(['id' => $id]);
-        if (!$page instanceof MarkdownPage){
+        if (! $page instanceof MarkdownPage) {
             throw new NotFound;
         }
         return $page;
@@ -43,9 +42,9 @@ final class DoctrineMarkdownPageRepo implements MarkdownPageRepo
 
     public function byTitle(string $title): MarkdownPage
     {
-        usleep(rand(500, 1500) * 1000);
+        usleep(random_int(500, 1500) * 1000);
         $page = $this->repo->findOneBy(['title' => $title]);
-        if (!$page instanceof MarkdownPage){
+        if (! $page instanceof MarkdownPage) {
             throw new NotFound;
         }
         return $page;
