@@ -1,7 +1,0 @@
-parameters:
-	ignoreErrors:
-		-
-			message: "#^Cannot call method handle\\(\\) on mixed\\.$#"
-			count: 3
-			path: src/Bootstrap.php
-
