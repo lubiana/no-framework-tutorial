@@ -7,7 +7,7 @@ Vagrant.configure("2") do |config|
     v.memory = 2048
     v.cpus = 4
   end
-  config.vm.network "forwarded_port", guest: 1234, host: 1234
+  config.vm.network "forwarded_port", guest: 1235, host: 1235
   config.vm.network "forwarded_port", guest: 22, host: 2200, id: 'ssh'
   config.vm.synced_folder "./app", "/home/vagrant/app/"
   config.ssh.username = 'vagrant'

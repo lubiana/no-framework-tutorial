@@ -72,7 +72,7 @@ case \FastRoute\Dispatcher::FOUND:
 
 So instead of just calling a method you are now instantiating an object and then calling the method on it.
 
-Now if you visit `http://localhost:1234/` everything should work. If not, go back and debug.
+Now if you visit `http://localhost:1235/` everything should work. If not, go back and debug.
 
 And of course don't forget to commit your changes.
 

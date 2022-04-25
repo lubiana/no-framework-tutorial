@@ -241,7 +241,7 @@ class Page
 }
 ```
 
-You can now navigate your Browser to [localhost:1234/page][http://localhost:1234/page] and try out if everything works.
+You can now navigate your Browser to [localhost:1235/page][http://localhost:1235/page] and try out if everything works.
 
 Of course this code is far from looking good. We heavily rely on the pages being files in the filesystem, and the action
 should never be aware of the filesystem in the first place, also we have a lot of string replacements and other repetetive

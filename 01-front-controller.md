@@ -38,7 +38,7 @@ Now navigate inside your `src` folder and create a new `Bootstrap.php` file with
 echo 'Hello World!';
 ```
 
-Now let's see if everything is set up correctly. Open up a console and navigate into your projects `public` folder. In there type `php -S 0.0.0.0:1234` and press enter. This will start the built-in webserver and you can access your page in a browser with `http://localhost:1234`. You should now see the 'hello world' message.
+Now let's see if everything is set up correctly. Open up a console and navigate into your projects `public` folder. In there type `php -S 0.0.0.0:1235` and press enter. This will start the built-in webserver and you can access your page in a browser with `http://localhost:1235`. You should now see the 'hello world' message.
 
 If there is an error, go back and try to fix it. If you only see a blank page, check the console window where the server is running for errors.
 

@@ -29,7 +29,7 @@ vagrant ssh
 cd app
 ```
 
-I have exposed the port 1234 to be used in the VM, if you would like to use another one you are free to modify the
+I have exposed the port 1235 to be used in the VM, if you would like to use another one you are free to modify the
 Vagrantfile.
 
 

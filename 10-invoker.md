@@ -65,7 +65,7 @@ $args['request'] = $request;
 $response = $container->call($handler, $args);
 ```
 
-Try to open [localhost:1234/](http://localhost:1234/) in your browser and check if you are getting redirected to '/hello'.
+Try to open [localhost:1235/](http://localhost:1235/) in your browser and check if you are getting redirected to '/hello'.
 
 But by now you should know that I do not like to depend on specific implementations and the call method is not defined in
 the psr/container interface. Therefore we would not be able to use that if we are ever switching to the symfony container

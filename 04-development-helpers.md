@@ -238,7 +238,7 @@ with lots of parameters by hand all the time, so i added a few lines to my compo
 
 ```json
 "scripts": {
-    "serve": "php -S 0.0.0.0:1234 -t public",
+    "serve": "php -S 0.0.0.0:1235 -t public",
     "phpstan": "./vendor/bin/phpstan analyze",
     "baseline": "./vendor/bin/phpstan analyze --generate-baseline",
     "check": "./vendor/bin/phpcs",
