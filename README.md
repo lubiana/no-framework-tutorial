@@ -16,7 +16,7 @@ actually solve for you.
 This tutorial is based on the great [tutorial by Patrick Louys](https://github.com/PatrickLouys/no-framework-tutorial).
 My version is way more opiniated and uses some newer PHP features. But you should still check out his tutorial which is
 still very great and helped me personally a lot in taking the next step in my knowledge about PHP development. There is
-also an [amazon book](https://patricklouys.com/professional-php/) which expands on the topics covered in this tutorial.
+also an [amazing book](https://patricklouys.com/professional-php/) which expands on the topics covered in this tutorial.
 
 ## Getting started.
 

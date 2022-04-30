@@ -7,7 +7,8 @@ a bit more about what this interface does and why it is used in many application
 
 The Middlewares are basically a number of wrappers that stand between the client and your application. Each request gets
 passed through all the middlewares, gets handled by our controllers and then the response gets passed back through all
-the middlewars to the client/emitter.
+the middlewars to the client/emitter. You can check out [this Blogpost](https://doeken.org/blog/middleware-pattern-in-php)
+for a more in depth explanation of the middleware pattern.
 
 So every Middleware can modify the request before it goes on to the next middleware (and finally the handler) and the
 response after it gets created by our handlers.
