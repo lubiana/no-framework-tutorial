@@ -86,7 +86,7 @@ return function(\FastRoute\RouteCollector $r) {
 };
 ```
 
-Now let's rewrite the route dispatcher part to use the `Routes.php` file.
+Now let's rewrite the route dispatcher part to use the `routes.php` file.
 
 ```php
 $routeDefinitionCallback = require __DIR__ . '/../config/routes.php';

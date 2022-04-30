@@ -58,7 +58,7 @@ $environment = getenv('ENVIRONMENT') ?: 'dev';
 error_reporting(E_ALL);
 
 $whoops = new Run;
-if ($environment == 'dev') {
+if ($environment === 'dev') {
     $whoops->pushHandler(new PrettyPageHandler);
 } else {
     $whoops->pushHandler(function (\Throwable $e) {

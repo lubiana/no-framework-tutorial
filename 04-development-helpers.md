@@ -47,7 +47,7 @@ Line   Bootstrap.php
 The second error is something that "declare strict-types" already catches for us, but the first error is something that
 we usually would not discover easily without speccially looking for this errortype.
 
-We can add a simple configfile called phpstan.neon to our project so that we do not have to specify the errorlevel and
+We can add a simple configfile called `phpstan.neon` to our project so that we do not have to specify the errorlevel and
 path everytime we want to check our code for errors:
 
 ```yaml
@@ -90,16 +90,15 @@ on an old legacy codebase and wanted to add static analysis to it but cant becau
 everytime we use phpstan, we could add all those errors to a list and tell phpstan to only bother us about new errors we
 are adding to our code.
 
-In order to use that we have to add an empty file 'phpstan-baseline.neon' to our project, include that in the
-phpstan.neon file and run phpstan with the
-'--generate-baseline' option:
+In order to use that we have to add an empty file `phpstan-baseline.neon` to our project, include that in the
+`phpstan.neon` file and run phpstan with the `--generate-baseline` option:
 
 ```yaml
 includes:
     - phpstan-baseline.neon
 
 parameters:
-    level: 9
+    level: max
     paths:
         - src
 ```
@@ -127,7 +126,7 @@ directory.
 You can read more about its usage and possible rulesets in the [documentation](https://github.com/FriendsOfPHP/PHP-CS-Fixer#documentation)
 
 personally i like to have a more opiniated version with some rules added to the psr-12 standard and have therefore setup
-a configuration file that i use in all my projects .php-cs-fixer.php:
+a configuration file that i use in all my projects `.php-cs-fixer.php`:
 
 ```php
 <?php declare(strict_types=1);
@@ -174,7 +173,7 @@ return $config
 The PHPCodesniffer is sort of a combination of the previous tools, it checks for a defined codingstyle and some extra
 rules that are not just stylechanges but instead enforces extra rules in if-statements, exception handling etc.
 
-it provides the phpcs command to check for violations and the phpcbf command to actually fix most of the violations.
+it provides the `phpcs` command to check for violations and the `phpcbf` command to actually fix most of the violations.
 
 Without configuration the tool tries to apply the PSR12 standard just like the php-cs-fixer, but as you might have
 guessed we are adding some extra rules.
@@ -184,7 +183,7 @@ Lets install the ruleset with composer
 composer require --dev mnapoli/hard-mode
 ```
 
-and add a configuration file to actually use it '.phpcs.xml.dist'
+and add a configuration file to actually use it `.phpcs.xml.dist`
 ```xml
 <?xml version="1.0"?>
 <ruleset>
@@ -233,8 +232,8 @@ you could just write dd($whoops) somewhere in your bootstrap.php to check how th
 
 #### Composer scripts
 
-now we have a few commands that are available on the command line. i personally do not like to type complex commands
-with lots of parameters by hand all the time, so i added a few lines to my composer.json:
+now we have a few commands that are available on the command line. I personally do not like to type complex commands
+with lots of parameters by hand all the time, so I added a few lines to my `composer.json`:
 
 ```json
 "scripts": {
