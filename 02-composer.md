@@ -28,8 +28,8 @@ Add the following content to the file:
   },
   "authors": [
     {
-      "name": "lubiana",
-      "email": "lubiana@hannover.ccc.de"
+      "name": "example",
+      "email": "test@example.com"
     }
   ]
 }
