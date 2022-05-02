@@ -237,7 +237,10 @@ with lots of parameters by hand all the time, so I added a few lines to my `comp
 
 ```json
 "scripts": {
-    "serve": "php -S 0.0.0.0:1235 -t public",
+    "serve": [
+      "Composer\\Config::disableProcessTimeout",
+      "php -S 0.0.0.0:1235 -t public"       
+    ],
     "phpstan": "./vendor/bin/phpstan analyze",
     "baseline": "./vendor/bin/phpstan analyze --generate-baseline",
     "check": "./vendor/bin/phpcs",
@@ -245,8 +248,8 @@ with lots of parameters by hand all the time, so I added a few lines to my `comp
 },
 ```
 
-that way i can just type "composer" followed by the command name in the root of my project. if i want to start the
-php devserver i can just type "composer serve" and dont have to type in the hostname, port and targetdirectory all the
+that way I can just type "composer" followed by the command name in the root of my project. if i want to start the
+php devserver I can just type "composer serve" and dont have to type in the hostname, port and targetdirectory all the
 time.
 
 You could also configure PhpStorm to automatically run these commands in the background and highlight the violations
