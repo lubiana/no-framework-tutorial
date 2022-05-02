@@ -4,7 +4,7 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "archlinux/archlinux"
   config.vm.provider "virtualbox" do |v|
-    v.memory = 256
+    v.memory = 512
     v.cpus = 2
   end
   config.vm.network "forwarded_port", guest: 1235, host: 1235
