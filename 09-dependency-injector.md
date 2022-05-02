@@ -12,7 +12,7 @@ for a [suitable solution on packagist](https://packagist.org/providers/psr/conta
 I choose the [PHP-DI](https://packagist.org/packages/php-di/php-di) container, as it is easy to configure and provides some very [powerfull features](https://php-di.org/#autowiring) 
 out of the box.
 
-After installing the container through composer create a new file with the name 'dependencies.php' in your config folder:
+After installing the container through composer create a new file with the name `dependencies.php` in your config folder:
 
 ```php
 <?php declare(strict_types = 1);

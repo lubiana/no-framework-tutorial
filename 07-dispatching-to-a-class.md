@@ -12,7 +12,7 @@ So forget about MVC and instead let's worry about [separation of concerns](http:
 We will need a descriptive name for the classes that handle the requests. For this tutorial I will use `Handler`, other
 common names are 'Controllers' or 'Actions'.
 
-Create a new folder inside the `src/` folder with the name `Handler`.In this folder we will place all our action classes.
+Create a new folder inside the `src/` folder with the name `Action`. In this folder we will place all our action classes.
 In there, create a `Hello.php` file.
 
 ```php
@@ -36,7 +36,7 @@ You can see that we implement the [RequestHandlerInterface](https://github.com/p
 that has a 'handle'-Method with requires a Requestobject as its parameter and returns a Responseobject. For now this is
 fine, but we may have to change our approach later. In anyway it is good to know about this interface as we will implement
 it in some other parts of our application as well. In order to use that Interface we have to require it with composer:
-'composer require psr/http-server-handler'.
+`composer require psr/http-server-handler`.
 
 The autoloader will only work if the namespace of a class matches the file path and the file name equals the class name. 
 At the beginning I defined `Lubian\NoFramework` as the root namespace of the application so this is referring to the `src/` folder.
