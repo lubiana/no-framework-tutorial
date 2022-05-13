@@ -7,7 +7,7 @@ used only for development they should not be used in a production environment. C
 file called "dev-dependencies", everything that is required in this section does not get installen in production.
 
 Let's install our dev-helpers and i will explain them one by one:
-`composer require --dev phpstan/phpstan php-cs-fixer/shim symfony/var-dumper squizlabs/php_codesniffer`
+`composer require --dev phpstan/phpstan symfony/var-dumper slevomat/coding-standard symplify/easy-coding-standard`
 
 #### Static Code Analysis with phpstan
 
@@ -116,57 +116,104 @@ Note: Using configuration file /home/vagrant/app/phpstan.neon.
 
 you can read more about the possible parameters and usage options in the [documentation](https://phpstan.org/user-guide/getting-started)
 
-#### PHP-CS-Fixer
+#### Easy-Coding-Standard
 
-Another great tool is the php-cs-fixer, which just applies a specific style to your code.
+There are two great tools that help us with applying a consistent coding style to our project as well as check and
+automatically fix some other errors and oversights that we might not bother with when writing our code.
 
-when you run `./vendor/bin/php-cs-fixer fix ./` it applies the psr-12 code style to every php file in you current
-directory.
+The first one is [PHP Coding Standards Fixer](https://cs.symfony.com/) which can automatically detect violations of
+a defined coding standard and fix them. The second tool is [PHP CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer)
+which basically does the same has in my experience some more Rules available that we can apply to our code.
 
-You can read more about its usage and possible rulesets in the [documentation](https://github.com/FriendsOfPHP/PHP-CS-Fixer#documentation)
-
-personally i like to have a more opiniated version with some rules added to the psr-12 standard and have therefore setup
-a configuration file that i use in all my projects `.php-cs-fixer.php`:
+But we are going to use neither of those tools directly and instead choose the [Easy Coding Standard](https://github.com/symplify/easy-coding-standard)
+which allows us to combine rules from both mentioned tools, and also claims to run much faster. You could check out the
+documentation and decide on your own coding standard. Or use the one provided by me, which is base on PSR-12 but adds
+some highly opiniated options. First create a file 'ecs.php' and either add your own configuration or copy the my
+prepared one:
 
 ```php
 <?php declare(strict_types=1);
-/*
- * This document has been generated with
- * https://mlocati.github.io/php-cs-fixer-configurator/#version:3.1.0|configurator
- * you can change this configuration by importing this file.
- */
-$config = new PhpCsFixer\Config();
-return $config
-    ->setRiskyAllowed(true)
-    ->setRules([
-        '@PSR12:risky' => true,
-        '@PSR12' => true,
-        '@PHP80Migration' => true,
-        '@PHP80Migration:risky' => true,
-        '@PHP81Migration' => true,
-        'array_indentation' => true,
-        'include' => true,
-        'blank_line_after_opening_tag' => false,
-        'native_constant_invocation' => true,
-        'new_with_braces' => false,
-        'native_function_invocation' => [
-            'include' => ['@all']
-        ],
-        'no_unused_imports' => true,
-        'global_namespace_import' => [
-            'import_classes' => true,
-            'import_constants' => true,
-            'import_functions' => true,
-        ],
-        'ordered_interfaces' => true,
-    ])
-    ->setFinder(
-        PhpCsFixer\Finder::create()
-            ->in([
-                __DIR__ . '/src',
-            ])
-    );
+
+use PhpCsFixer\Fixer\Import\OrderedImportsFixer;
+use PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer;
+use SlevomatCodingStandard\Sniffs\Classes\ClassConstantVisibilitySniff;
+use SlevomatCodingStandard\Sniffs\Namespaces\AlphabeticallySortedUsesSniff;
+use SlevomatCodingStandard\Sniffs\Namespaces\DisallowGroupUseSniff;
+use SlevomatCodingStandard\Sniffs\Namespaces\MultipleUsesPerLineSniff;
+use SlevomatCodingStandard\Sniffs\Namespaces\NamespaceSpacingSniff;
+use SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff;
+use SlevomatCodingStandard\Sniffs\Namespaces\UseSpacingSniff;
+use SlevomatCodingStandard\Sniffs\TypeHints\DeclareStrictTypesSniff;
+use SlevomatCodingStandard\Sniffs\TypeHints\UnionTypeHintFormatSniff;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\EasyCodingStandard\ValueObject\Option;
+use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $parameters = $containerConfigurator->parameters();
+    $parameters->set(Option::PATHS, [__DIR__ . '/src', __DIR__ . '/ecs.php']);
+    $parameters->set(Option::PARALLEL, true);
+    $parameters->set(Option::SKIP, [BlankLineAfterOpeningTagFixer::class, OrderedImportsFixer::class]);
+
+    $containerConfigurator->import(SetList::PSR_12);
+    $containerConfigurator->import(SetList::STRICT);
+    $containerConfigurator->import(SetList::ARRAY);
+    $containerConfigurator->import(SetList::SPACES);
+    $containerConfigurator->import(SetList::DOCBLOCK);
+    $containerConfigurator->import(SetList::CLEAN_CODE);
+    $containerConfigurator->import(SetList::COMMON);
+    $containerConfigurator->import(SetList::COMMENTS);
+    $containerConfigurator->import(SetList::NAMESPACES);
+    $containerConfigurator->import(SetList::SYMPLIFY);
+    $containerConfigurator->import(SetList::CONTROL_STRUCTURES);
+
+    $services = $containerConfigurator->services();
+
+    // force visibitily declaration on class constants
+    $services->set(ClassConstantVisibilitySniff::class)
+        ->property('fixable', true);
+
+    // sort all use statements
+    $services->set(AlphabeticallySortedUsesSniff::class);
+
+    $services->set(DisallowGroupUseSniff::class);
+    $services->set(MultipleUsesPerLineSniff::class);
+    $services->set(NamespaceSpacingSniff::class);
+
+    // import all namespaces, and event php core functions and classes
+    $services->set(ReferenceUsedNamesOnlySniff::class)
+        ->property('allowFallbackGlobalConstants', false)
+        ->property('allowFallbackGlobalFunctions', false)
+        ->property('allowFullyQualifiedGlobalClasses', false)
+        ->property('allowFullyQualifiedGlobalConstants', false)
+        ->property('allowFullyQualifiedGlobalFunctions', false)
+        ->property('allowFullyQualifiedNameForCollidingClasses', true)
+        ->property('allowFullyQualifiedNameForCollidingConstants', true)
+        ->property('allowFullyQualifiedNameForCollidingFunctions', true)
+        ->property('searchAnnotations', true)
+        ->property('fixable', true);
+
+    // define newlines between use statements
+    $services->set(UseSpacingSniff::class)
+        ->property('linesCountBeforeFirstUse', 1)
+        ->property('linesCountBetweenUseTypes', 1)
+        ->property('linesCountAfterLastUse', 1);
+
+    // strict types declaration should be on same line as opening tag
+    $services->set(DeclareStrictTypesSniff::class)
+        ->property('declareOnFirstLine', true)
+        ->property('spacesCountAroundEqualsSign', 0);
+
+    // disallow ?Foo typehint in favor of Foo|null
+    $services->set(UnionTypeHintFormatSniff::class)
+        ->property('withSpaces', 'no')
+        ->property('shortNullable', 'no')
+        ->property('nullPosition', 'last');
+};
+
 ```
+You can now use `./vendor/bin/ecs` to list all violations of the defined standard and `./vendor/bin/ecs --fix` to
+automatically fix them.
 
 #### PHP Codesniffer
 
@@ -223,7 +270,7 @@ You can then use `./vendor/bin/phpcbf` to try to fix them
 another great tool for some quick debugging without xdebug is the symfony var-dumper. This just gives us some small
 functions.
 
-dump(); is basically like phps var_dump() but has a better looking output that helps when looking into bigger objects 
+dump(); is basically like phps var_dump() but has a better looking output that helps when looking into bigger objects
 or arrays.
 
 dd() on the other hand is a function that dumps its parameters and then exits the php-script.
