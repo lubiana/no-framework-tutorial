@@ -215,56 +215,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 You can now use `./vendor/bin/ecs` to list all violations of the defined standard and `./vendor/bin/ecs --fix` to
 automatically fix them.
 
-#### PHP Codesniffer
-
-The PHPCodesniffer is sort of a combination of the previous tools, it checks for a defined codingstyle and some extra
-rules that are not just stylechanges but instead enforces extra rules in if-statements, exception handling etc.
-
-it provides the `phpcs` command to check for violations and the `phpcbf` command to actually fix most of the violations.
-
-Without configuration the tool tries to apply the PSR12 standard just like the php-cs-fixer, but as you might have
-guessed we are adding some extra rules.
-
-Lets install the ruleset with composer
-```shell
-composer require --dev mnapoli/hard-mode
-```
-
-and add a configuration file to actually use it `.phpcs.xml.dist`
-```xml
-<?xml version="1.0"?>
-<ruleset>
-    <arg name="basepath" value="."/>
-
-    <file>src</file>
-
-    <rule ref="HardMode"/>
-</ruleset>
-```
-
-running `./vendor/bin/phpcs` now checks our src directory for violations and gives us a detailed list about the findings.
-
-```
-[vagrant@archlinux app]$ ./vendor/bin/phpcs
-
-FILE: src/Bootstrap.php
-----------------------------------------------------------------------------------------------------
-FOUND 4 ERRORS AFFECTING 4 LINES
-----------------------------------------------------------------------------------------------------
-  7 | ERROR | [x] Use statements should be sorted alphabetically. The first wrong one is Throwable.
-  8 | ERROR | [x] Expected 1 lines between different types of use statement, found 0.
- 11 | ERROR | [x] Expected 1 lines between different types of use statement, found 0.
- 24 | ERROR | [x] String "ERROR: " does not require double quotes; use single quotes instead
-----------------------------------------------------------------------------------------------------
-PHPCBF CAN FIX THE 4 MARKED SNIFF VIOLATIONS AUTOMATICALLY
-----------------------------------------------------------------------------------------------------
-
-Time: 639ms; Memory: 10MB
-```
-
-You can then use `./vendor/bin/phpcbf` to try to fix them
-
-
 #### Symfony Var-Dumper
 
 another great tool for some quick debugging without xdebug is the symfony var-dumper. This just gives us some small
@@ -290,8 +240,8 @@ with lots of parameters by hand all the time, so I added a few lines to my `comp
     ],
     "phpstan": "./vendor/bin/phpstan analyze",
     "baseline": "./vendor/bin/phpstan analyze --generate-baseline",
-    "check": "./vendor/bin/phpcs",
-    "fix": "./vendor/bin/php-cs-fixer fix && ./vendor/bin/phpcbf"
+    "check": "./vendor/bin/ecs",
+    "fix": "./vendor/bin/ecs --fix"
 },
 ```
 
@@ -303,7 +253,8 @@ You could also configure PhpStorm to automatically run these commands in the bac
 directly in the file you are currently editing. I personally am not a fan of this approach because it often disrupts my
 flow when programming and always forces me to be absolutely strict even if I am only trying out an idea for debugging.
 
-My workflow is to just write my code the way i currently feel and that execute the phpstan and the fix scripts before
-commiting and pushing the code.
+My workflow is to just write my code the way I currently feel and that execute the phpstan and the fix scripts before
+commiting and pushing the code. There is a [highly opiniated blogpost](https://tomasvotruba.com/blog/2019/06/24/do-you-use-php-codesniffer-and-php-cs-fixer-phpstorm-plugin-you-are-slow-and-expensive/)
+discussing that topic further. That you can read. But in the end it boils down to what you are most comfortable with.
 
 [<< previous](03-error-handler.md) | [next >>](05-http.md)
