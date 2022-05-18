@@ -135,8 +135,10 @@ prepared one:
 <?php declare(strict_types=1);
 
 use PhpCsFixer\Fixer\Import\OrderedImportsFixer;
+use PhpCsFixer\Fixer\Operator\NewWithBracesFixer;
 use PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer;
 use SlevomatCodingStandard\Sniffs\Classes\ClassConstantVisibilitySniff;
+use SlevomatCodingStandard\Sniffs\ControlStructures\NewWithoutParenthesesSniff;
 use SlevomatCodingStandard\Sniffs\Namespaces\AlphabeticallySortedUsesSniff;
 use SlevomatCodingStandard\Sniffs\Namespaces\DisallowGroupUseSniff;
 use SlevomatCodingStandard\Sniffs\Namespaces\MultipleUsesPerLineSniff;
@@ -145,37 +147,41 @@ use SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff;
 use SlevomatCodingStandard\Sniffs\Namespaces\UseSpacingSniff;
 use SlevomatCodingStandard\Sniffs\TypeHints\DeclareStrictTypesSniff;
 use SlevomatCodingStandard\Sniffs\TypeHints\UnionTypeHintFormatSniff;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\EasyCodingStandard\Config\ECSConfig;
 use Symplify\EasyCodingStandard\ValueObject\Option;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $parameters = $containerConfigurator->parameters();
+return static function (ECSConfig $config): void {
+    $parameters = $config->parameters();
     $parameters->set(Option::PATHS, [__DIR__ . '/src', __DIR__ . '/ecs.php']);
     $parameters->set(Option::PARALLEL, true);
-    $parameters->set(Option::SKIP, [BlankLineAfterOpeningTagFixer::class, OrderedImportsFixer::class]);
+    $parameters->set(
+        Option::SKIP,
+        [BlankLineAfterOpeningTagFixer::class, OrderedImportsFixer::class, NewWithBracesFixer::class]
+    );
 
-    $containerConfigurator->import(SetList::PSR_12);
-    $containerConfigurator->import(SetList::STRICT);
-    $containerConfigurator->import(SetList::ARRAY);
-    $containerConfigurator->import(SetList::SPACES);
-    $containerConfigurator->import(SetList::DOCBLOCK);
-    $containerConfigurator->import(SetList::CLEAN_CODE);
-    $containerConfigurator->import(SetList::COMMON);
-    $containerConfigurator->import(SetList::COMMENTS);
-    $containerConfigurator->import(SetList::NAMESPACES);
-    $containerConfigurator->import(SetList::SYMPLIFY);
-    $containerConfigurator->import(SetList::CONTROL_STRUCTURES);
+    $config->sets([
+        SetList::PSR_12,
+        SetList::STRICT,
+        SetList::ARRAY,
+        SetList::SPACES,
+        SetList::DOCBLOCK,
+        SetList::CLEAN_CODE,
+        SetList::COMMON,
+        SetList::COMMENTS,
+        SetList::NAMESPACES,
+        SetList::SYMPLIFY,
+        SetList::CONTROL_STRUCTURES,
+    ]);
 
-    $services = $containerConfigurator->services();
+    $services = $config->services();
 
-    // force visibitily declaration on class constants
+    // force visibility declaration on class constants
     $services->set(ClassConstantVisibilitySniff::class)
         ->property('fixable', true);
 
     // sort all use statements
     $services->set(AlphabeticallySortedUsesSniff::class);
-
     $services->set(DisallowGroupUseSniff::class);
     $services->set(MultipleUsesPerLineSniff::class);
     $services->set(NamespaceSpacingSniff::class);
@@ -209,7 +215,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->property('withSpaces', 'no')
         ->property('shortNullable', 'no')
         ->property('nullPosition', 'last');
+
+    // Remove useless parantheses in new statements
+    $services->set(NewWithoutParenthesesSniff::class);
 };
+
 
 ```
 You can now use `./vendor/bin/ecs` to list all violations of the defined standard and `./vendor/bin/ecs --fix` to
