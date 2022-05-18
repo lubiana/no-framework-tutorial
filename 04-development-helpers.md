@@ -7,7 +7,7 @@ used only for development they should not be used in a production environment. C
 file called "dev-dependencies", everything that is required in this section does not get installen in production.
 
 Let's install our dev-helpers and i will explain them one by one:
-`composer require --dev phpstan/phpstan symfony/var-dumper slevomat/coding-standard symplify/easy-coding-standard`
+`composer require --dev phpstan/phpstan symfony/var-dumper slevomat/coding-standard symplify/easy-coding-standard rector/rector`
 
 #### Static Code Analysis with phpstan
 
@@ -215,6 +215,37 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 You can now use `./vendor/bin/ecs` to list all violations of the defined standard and `./vendor/bin/ecs --fix` to
 automatically fix them.
 
+#### Rector
+
+The next tool helps us with automatic refactorings and upgrades to newer PHP versions. 
+
+Place a file called `rector.php` in your app directory and put in the following content:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Rector\Config\RectorConfig;
+use Rector\Set\ValueObject\LevelSetList;
+
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->paths([__DIR__ . '/src', __DIR__ . '/config']);
+
+    $rectorConfig->importNames();
+
+    $rectorConfig->sets([
+        LevelSetList::UP_TO_PHP_81,
+    ]);
+};
+```
+
+This config fixes your code and replaces function call and constructs that are deprecated in modern php versions. This
+includes all fixes from PHP 5.2 up to PHP 8.1. You can take a look at all the rules [here](https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#php52).
+
+To run this tool simply type `./vendor/bin/rector process` in your console. This should not to much right now, but will
+be quite useful when php 8.2 or newer versions are released.
+
 #### Symfony Var-Dumper
 
 another great tool for some quick debugging without xdebug is the symfony var-dumper. This just gives us some small
@@ -241,7 +272,8 @@ with lots of parameters by hand all the time, so I added a few lines to my `comp
     "phpstan": "./vendor/bin/phpstan analyze",
     "baseline": "./vendor/bin/phpstan analyze --generate-baseline",
     "check": "./vendor/bin/ecs",
-    "fix": "./vendor/bin/ecs --fix"
+    "fix": "./vendor/bin/ecs --fix",
+    "rector": "./vendor/bin/rector process"
 },
 ```
 
