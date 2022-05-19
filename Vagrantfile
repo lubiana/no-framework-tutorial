@@ -23,5 +23,6 @@ Vagrant.configure("2") do |config|
     echo -e 'zend.assertions=1\n' >> /etc/php/conf.d/tutorial.ini
     echo -e 'opcache.enable=1\nopcache.enable_cli=1\n' >> /etc/php/conf.d/tutorial.ini
     echo -e 'acp.enable=1\napc.enable_cli=1\n' >> /etc/php/conf.d/tutorial.ini
+    echo -e 'extension=intl\n' >> /etc/php/conf.d/tutorial.ini
   SHELL
 end
