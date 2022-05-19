@@ -148,17 +148,12 @@ use SlevomatCodingStandard\Sniffs\Namespaces\UseSpacingSniff;
 use SlevomatCodingStandard\Sniffs\TypeHints\DeclareStrictTypesSniff;
 use SlevomatCodingStandard\Sniffs\TypeHints\UnionTypeHintFormatSniff;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
-use Symplify\EasyCodingStandard\ValueObject\Option;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
 return static function (ECSConfig $config): void {
-    $parameters = $config->parameters();
-    $parameters->set(Option::PATHS, [__DIR__ . '/src', __DIR__ . '/ecs.php']);
-    $parameters->set(Option::PARALLEL, true);
-    $parameters->set(
-        Option::SKIP,
-        [BlankLineAfterOpeningTagFixer::class, OrderedImportsFixer::class, NewWithBracesFixer::class]
-    );
+    $config->parallel();
+    $config->paths([__DIR__ . '/src', __DIR__ . '/ecs.php', __DIR__ . '/rector.php']);
+    $config->skip([BlankLineAfterOpeningTagFixer::class, OrderedImportsFixer::class, NewWithBracesFixer::class]);
 
     $config->sets([
         SetList::PSR_12,
@@ -174,52 +169,58 @@ return static function (ECSConfig $config): void {
         SetList::CONTROL_STRUCTURES,
     ]);
 
-    $services = $config->services();
-
     // force visibility declaration on class constants
-    $services->set(ClassConstantVisibilitySniff::class)
-        ->property('fixable', true);
+    $config->ruleWithConfiguration(ClassConstantVisibilitySniff::class, [
+        'fixable' => true,
+    ]);
 
     // sort all use statements
-    $services->set(AlphabeticallySortedUsesSniff::class);
-    $services->set(DisallowGroupUseSniff::class);
-    $services->set(MultipleUsesPerLineSniff::class);
-    $services->set(NamespaceSpacingSniff::class);
+    $config->rules([
+        AlphabeticallySortedUsesSniff::class,
+        DisallowGroupUseSniff::class,
+        MultipleUsesPerLineSniff::class,
+        NamespaceSpacingSniff::class,
+    ]);
 
-    // import all namespaces, and event php core functions and classes
-    $services->set(ReferenceUsedNamesOnlySniff::class)
-        ->property('allowFallbackGlobalConstants', false)
-        ->property('allowFallbackGlobalFunctions', false)
-        ->property('allowFullyQualifiedGlobalClasses', false)
-        ->property('allowFullyQualifiedGlobalConstants', false)
-        ->property('allowFullyQualifiedGlobalFunctions', false)
-        ->property('allowFullyQualifiedNameForCollidingClasses', true)
-        ->property('allowFullyQualifiedNameForCollidingConstants', true)
-        ->property('allowFullyQualifiedNameForCollidingFunctions', true)
-        ->property('searchAnnotations', true)
-        ->property('fixable', true);
+    // import all namespaces, and even php core functions and classes
+    $config->ruleWithConfiguration(
+        ReferenceUsedNamesOnlySniff::class,
+        [
+            'allowFallbackGlobalConstants' => false,
+            'allowFallbackGlobalFunctions' => false,
+            'allowFullyQualifiedGlobalClasses' => false,
+            'allowFullyQualifiedGlobalConstants' => false,
+            'allowFullyQualifiedGlobalFunctions' => false,
+            'allowFullyQualifiedNameForCollidingClasses' => true,
+            'allowFullyQualifiedNameForCollidingConstants' => true,
+            'allowFullyQualifiedNameForCollidingFunctions' => true,
+            'searchAnnotations' => true,
+        ]
+    );
 
     // define newlines between use statements
-    $services->set(UseSpacingSniff::class)
-        ->property('linesCountBeforeFirstUse', 1)
-        ->property('linesCountBetweenUseTypes', 1)
-        ->property('linesCountAfterLastUse', 1);
+    $config->ruleWithConfiguration(UseSpacingSniff::class, [
+        'linesCountBeforeFirstUse' => 1,
+        'linesCountBetweenUseTypes' => 1,
+        'linesCountAfterLastUse' => 1,
+    ]);
 
     // strict types declaration should be on same line as opening tag
-    $services->set(DeclareStrictTypesSniff::class)
-        ->property('declareOnFirstLine', true)
-        ->property('spacesCountAroundEqualsSign', 0);
+    $config->ruleWithConfiguration(DeclareStrictTypesSniff::class, [
+        'declareOnFirstLine' => true,
+        'spacesCountAroundEqualsSign' => 0,
+    ]);
 
     // disallow ?Foo typehint in favor of Foo|null
-    $services->set(UnionTypeHintFormatSniff::class)
-        ->property('withSpaces', 'no')
-        ->property('shortNullable', 'no')
-        ->property('nullPosition', 'last');
+    $config->ruleWithConfiguration(UnionTypeHintFormatSniff::class, [
+        'withSpaces' => 'no',
+        'shortNullable' => 'no',
+        'nullPosition' => 'last',
+    ]);
 
-    // Remove useless parantheses in new statements
-    $services->set(NewWithoutParenthesesSniff::class);
+    // Remove useless parentheses in new statements
+    $config->rule(NewWithoutParenthesesSniff::class);
 };
-
 
 ```
 You can now use `./vendor/bin/ecs` to list all violations of the defined standard and `./vendor/bin/ecs --fix` to
@@ -240,7 +241,7 @@ use Rector\Config\RectorConfig;
 use Rector\Set\ValueObject\LevelSetList;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->paths([__DIR__ . '/src', __DIR__ . '/config']);
+    $rectorConfig->paths([__DIR__ . '/src', __DIR__ . '/rector.php', __DIR__ . '/ecs.php']);
 
     $rectorConfig->importNames();
 
