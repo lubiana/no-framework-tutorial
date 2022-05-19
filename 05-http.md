@@ -30,7 +30,7 @@ enter
 Now you can add the following below your error handler code in your `Bootstrap.php` (and don't forget to remove the exception):
 
 ```php
-$request = Laminas\Diactoros\ServerRequestFactory::fromGlobals();
+$request = \Laminas\Diactoros\ServerRequestFactory::fromGlobals();
 $response = new \Laminas\Diactoros\Response;
 $response->getBody()->write('Hello World! ');
 $response->getBody()->write('The Uri is: ' . $request->getUri()->getPath());
