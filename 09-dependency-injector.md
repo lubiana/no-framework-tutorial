@@ -2,6 +2,16 @@
 
 ### Dependency Injector
 
+In the last chapter we rewrote our Actions to require the response-objet as a constructor parameter, and provided it
+in the dispatcher section of our `Bootstrap.php`. As we only have one dependency this works really fine, but if we have
+different classes with different dependencies our bootstrap file gets complicated quite quickly. Lets look at an example
+to explain the problem and work on a solution.
+
+#### Adding a clock service
+
+Lets assume that we want to show the current time in our Hello action. We could easily just call use one of the many
+ways to get the current time directly in the handle-method, but maybe we want to make that configurable and 
+
 A dependency injector resolves the dependencies of your class and makes sure that the correct objects are injected when
 the class is instantiated.
 
