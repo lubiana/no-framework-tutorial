@@ -7,7 +7,7 @@ want to switch to a more powerfull Http-Implementation later, or need to create 
 we would need to edit every one of our request handlers to call a different constructor of the class.
 
 The sane option is to use [inversion of control](http://en.wikipedia.org/wiki/Inversion_of_control). This means that
-instead of giving the class the responsiblity of creating the object it needs, you just ask for them. This is done
+instead of giving the class the responsibility of creating the object it needs, you just ask for them. This is done
 with [dependency injection](http://en.wikipedia.org/wiki/Dependency_injection).
 
 If this sounds a little complicated right now, don't worry. Just follow the tutorial and once you see how it is

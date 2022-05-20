@@ -4,13 +4,13 @@
 
 In the last chapter we rewrote our Actions to require the response-objet as a constructor parameter, and provided it
 in the dispatcher section of our `Bootstrap.php`. As we only have one dependency this works really fine, but if we have
-different classes with different dependencies our bootstrap file gets complicated quite quickly. Lets look at an example
+different classes with different dependencies our bootstrap file gets complicated quite quickly. Let's look at an example
 to explain the problem and work on a solution.
 
 #### Adding a clock service
 
 Lets assume that we want to show the current time in our Hello action. We could easily just call use one of the many
-ways to get the current time directly in the handle-method, but lets create a separate class and interface for that so
+ways to get the current time directly in the handle-method, but let's create a separate class and interface for that so
 we can later configure and switch our implementation.
 
 We need a new 'Service\Time' namespace, so lets first create the folder in our 'src' directory 'src/Service/Time'.
@@ -45,7 +45,7 @@ final class SystemClock implements Clock
 }
 ```
 
-Now we can require the Clockinterface as a depencency in our controller and use it to display the current time.
+Now we can require the Clock interface as a dependency in our controller and use it to display the current time.
 ```php
 <?php declare(strict_types=1);
 
@@ -82,7 +82,7 @@ final class Hello implements RequestHandlerInterface
 }
 ```
 
-But if we try to access the corresponding route in the webbrowser we get an error:
+But if we try to access the corresponding route in the browser we get an error:
 > Too few arguments to function Lubian\NoFramework\Action\Hello::__construct(), 1 passed in /home/lubiana/PhpstormProjects/no-framework/app/src/Bootstrap.php on line 62 and exactly 2 expected
 
 Our current problem is, that we have two Actions defined, which both have different constructor requirements. That means,
@@ -114,7 +114,7 @@ I mostly define an Interface or a fully qualified classname as an ID. That way I
 the Clock interface or an Action class and get an object of that class or an object implementing the given Interface.
 
 For the sake of this tutorial we will put a new file in our config folder that returns an anonymous class implementing
-the containerinterface.
+the container-interface.
 
 In this class we will configure all services required for our application and make them accessible via the get($id)
 method.
@@ -164,13 +164,13 @@ return new class () implements \Psr\Container\ContainerInterface {
 };
 ```
 
-Here I have declared a services array, that has a class- or interfacename as the keys, and the values are short
+Here I have declared a services array, that has a class- or interface name as the keys, and the values are short
 closures that return an Object of the defined class or interface. The `has` method simply checks if the given id is
 defined in our services array, and the `get` method calls the closure defined in the array for the given id key and then
 returns the result of that closure.
 
 To use the container we need to update our Bootstrap.php. Firstly we need to get an instance of our container, and then
-use that to create our Request-Object as well as the Dispatcher. So remove the manual instantion of those objects and
+use that to create our Request-Object as well as the Dispatcher. So remove the manual instantiation of those objects and
 replace that with the following code:
 
 ```php
@@ -201,7 +201,7 @@ assert($handler instanceof RequestHandlerInterface);
 
 If you now open the `/hello` route in your browser everything should work again!
 
-#### Using Autowiring
+#### Using Auto wiring
 
 If you take a critical look at the services array you might see that we need to manually define how our Hello- and
 Other-Action are getting constructed. This is quite repetitive, as we have already declared what objects to create
@@ -215,9 +215,9 @@ functionality ourselves, or just try to use a library that takes care of that fo
 You can query the composer database to find all [libraries that implment the container interface](https://packagist.org/providers/psr/container-implementation).
 
 I choose the [PHP-DI](https://packagist.org/packages/php-di/php-di) container, as it is easy to configure and provides some very [powerfull features](https://php-di.org/#autowiring) 
-out of the box, and also solves the autowiring problem.
+out of the box, and also solves the auto wiring problem.
 
-Lets rewrite our `container.php` file to use the PHP-DI container and only define the Services the Container cannot
+Let's rewrite our `container.php` file to use the PHP-DI container and only define the Services the Container cannot
 automatically build.
 
 ```php
@@ -237,7 +237,7 @@ return $builder->build();
 ```
 
 As the PHP-DI container that is return by the `$builder->build()` method implements the same container interface as our
-previously used ad-hoc container we won't need to update the our Bootstrap file and everything still works.
+previously used ad-hoc container we won't need to update the Bootstrap file and everything still works.
 
 
 [<< previous](08-inversion-of-control.md) | [next >>](10-invoker.md)

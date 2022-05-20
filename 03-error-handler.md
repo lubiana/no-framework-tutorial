@@ -23,7 +23,7 @@ like this:
 },
 ```
 
-Now run `composer update` in your console and it will be installed.
+Now run `composer update` in your console, and it will be installed.
 
 Another way to install packages is to simply type "composer require filp/whoops" into your terminal at the project root,
 i that case composer automatically installs the package and updates your composer.json-file.
@@ -33,7 +33,7 @@ ideally a [PSR-4](http://www.php-fig.org/psr/psr-4/) autoloader. Composer alread
 only have to add a `require __DIR__ . '/../vendor/autoload.php';` to your `Bootstrap.php`.
 
 **Important:** Never show any errors in your production environment. A stack trace or even just a simple error message
-can help someone to gain access to your system. Always show a user friendly error page instead and send an email to
+can help someone to gain access to your system. Always show a user-friendly error page instead and send an email to
 yourself, write to a log or something similar. So only you can see the errors in the production environment.
 
 For development that does not make sense though -- you want a nice error page. The solution is to have an environment

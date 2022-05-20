@@ -19,7 +19,7 @@ the laminas/laminas-diactoros package as i am an old time fan of the laminas (pr
 Some alternatives are [slim-psr7](https://github.com/slimphp/Slim-Psr7), [Guzzle](https://github.com/guzzle/psr7) and a
 [lot more](https://packagist.org/providers/psr/http-message-implementation) are available for you to choose from.
 
-Symfony ships its own Request and Response objects that do not implement the psr-7 interfaces. Therefore i will not use
+Symfony ships its own Request and Response objects that do not implement the psr-7 interfaces. Therefore, I will not use
 that in this tutorial, but if you understand how the psr-7 interfaces work you should have no problem in understanding
 the [symfony http-foundation](https://symfony.com/doc/current/components/http_foundation.html#request).
 
@@ -38,7 +38,7 @@ $response->getBody()->write('The Uri is: ' . $request->getUri()->getPath());
 
 This sets up the `Request` and `Response` objects that you can use in your other classes to get request data and send a response back to the browser.
 
-In order to actually add content to the response you have to access the Body-Streamobject of the Response and use the
+In order to actually add content to the response you have to access the body stream object of the Response and use the
 write()-Method on that object.
 
 
@@ -66,7 +66,7 @@ $response = $response->withStatus(200);
 $response = $response->withAddedHeader('Content-type', 'application/json');
 ```
 
-If you have ever struggled with Mutationproblems in an DateTime-Object you might understand why the standard has been
+If you have ever struggled with Mutation-problems in an DateTime-Object you might understand why the standard has been
 defined this way.
 
 But if you have been keeping attention you might argue that the following line should not work if the request object is
@@ -80,7 +80,7 @@ The response-body implements a stream interface which is immutable for some reas
 [meta-document](https://www.php-fig.org/psr/psr-7/meta/#why-are-streams-mutable). For me the important thing is to be
 aware of the problems that can occur with mutable objects. Here is a small [Blogpost](http://andrew.carterlunn.co.uk/programming/2016/05/22/psr-7-is-not-immutable.html) that gives some context. Beware that the Middleware-Example in 
 the post is based on a deprecated middleware standard. But more on middlewares will be discussed in later chapters.
-I for one am happy about that fact, as it saves me from writing at least 3 lines of code whenever i want to add content
+I, for one, am happy about that fact, as it saves me from writing at least 3 lines of code whenever i want to add content
 to a response object.
 
 ```php
@@ -90,7 +90,7 @@ $response = $response->withBody($body);
 ```
 
 Right now we are just outputting the Response-Body without any headers or http-status. So we need to expand our
-output-logic a little bit more. Replace the line that echos the response-body with the following:
+output-logic a little more. Replace the line that echos the response-body with the following:
 
 ```php
 foreach ($response->getHeaders() as $name => $values) {
@@ -114,7 +114,7 @@ echo $response->getBody();
 ```
 
 This code is still fairly simple and there is a lot more stuff that can be considered when emitting a response to a 
-webbrowser, if you want a more complete solution you can take a look at the [httpsoft/http-emitter](https://github.com/httpsoft/http-emitter/blob/master/src/SapiEmitter.php) package on github.
+browser, if you want a more complete solution you can take a look at the [httpsoft/http-emitter](https://github.com/httpsoft/http-emitter/blob/master/src/SapiEmitter.php) package on github.
 
 Remember that the object is only storing data, so if you set multiple status codes before you send the response, only the last one will be applied.
 

@@ -4,7 +4,7 @@
 
 I have added some more helpers to my composer.json that help me with development. As these are scripts and programms
 used only for development they should not be used in a production environment. Composer has a specific sections in its
-file called "dev-dependencies", everything that is required in this section does not get installen in production.
+file called "dev-dependencies", everything that is required in this section does not get installed in production.
 
 Let's install our dev-helpers and i will explain them one by one:
 `composer require --dev phpstan/phpstan symfony/var-dumper slevomat/coding-standard symplify/easy-coding-standard rector/rector`
@@ -15,7 +15,7 @@ Phpstan is a great little tool, that tries to understand your code and checks if
 create bad defined interfaces and structures. It also helps in finding logic-errors, dead code, access to array elements
 that are not (or not always) available, if-statements that always are true and a lot of other stuff.
 
-A very simple example would be a small functions that takes a DateTime-Object and prints it in a human readable format.
+A very simple example would be a small functions that takes a DateTime-Object and prints it in a human-readable format.
 
 ```php
 /**
@@ -45,9 +45,9 @@ Line   Bootstrap.php
 ```
 
 The second error is something that "declare strict-types" already catches for us, but the first error is something that
-we usually would not discover easily without speccially looking for this errortype.
+we usually would not discover easily without specially looking for this error-type.
 
-We can add a simple configfile called `phpstan.neon` to our project so that we do not have to specify the errorlevel and
+We can add a simple config file called `phpstan.neon` to our project so that we do not have to specify the error level and
 path everytime we want to check our code for errors:
 
 ```yaml
@@ -59,7 +59,7 @@ parameters:
 now we can just call `./vendor/bin/phpstan analyze` and have the same setting for every developer working in our project
 
 With this settings we have already a great setup to catch some errors before we execute the code, but it still allows us
-some silly things, therefore we want to add install some packages that enforce rules that are a little bit more strict.
+some silly things, therefore we want to add install some packages that enforce rules that are a little stricter.
 
 ```shell
 composer require --dev phpstan/extension-installer
@@ -67,7 +67,7 @@ composer require --dev phpstan/phpstan-strict-rules thecodingmachine/phpstan-str
 ```
 
 During the first install you need to allow the extension installer to actually install the extension. The second command
-installs some more strict rulesets and activates them in phpstan.
+installs some more strict rules and activates them in phpstan.
 
 If we now rerun phpstan it already tells us about some errors we have made:
 
@@ -84,9 +84,9 @@ Line   Bootstrap.php
 ```
 
 The last two Errors are caused by the Exception we have used to test the ErrorHandler in the last chapter if we remove
-that we should be able to fix that. The first error is something we could fix, but I dont want to focus on that specific
+that we should be able to fix that. The first error is something we could fix, but I don't want to focus on that specific
 problem right now. Phpstan gives us the option to ignore some errors and handle them later. If for example we are working
-on an old legacy codebase and wanted to add static analysis to it but cant because we would get 1 Million error messages
+on an old legacy codebase and wanted to add static analysis to it but can't because we would get 1 Million error messages
 everytime we use phpstan, we could add all those errors to a list and tell phpstan to only bother us about new errors we
 are adding to our code.
 
@@ -128,7 +128,7 @@ which basically does the same has in my experience some more Rules available tha
 But we are going to use neither of those tools directly and instead choose the [Easy Coding Standard](https://github.com/symplify/easy-coding-standard)
 which allows us to combine rules from both mentioned tools, and also claims to run much faster. You could check out the
 documentation and decide on your own coding standard. Or use the one provided by me, which is base on PSR-12 but adds
-some highly opiniated options. First create a file 'ecs.php' and either add your own configuration or copy the my
+some highly opiniated options. First create a file 'ecs.php' and either add your own configuration or copy the
 prepared one:
 
 ```php
@@ -288,8 +288,8 @@ with lots of parameters by hand all the time, so I added a few lines to my `comp
 },
 ```
 
-that way I can just type "composer" followed by the command name in the root of my project. if i want to start the
-php devserver I can just type "composer serve" and dont have to type in the hostname, port and targetdirectory all the
+that way I can just type "composer" followed by the command name in the root of my project. if I want to start the
+php dev server I can just type "composer serve" and don't have to type in the hostname, port and target directory all the
 time.
 
 You could also configure PhpStorm to automatically run these commands in the background and highlight the violations
@@ -297,7 +297,7 @@ directly in the file you are currently editing. I personally am not a fan of thi
 flow when programming and always forces me to be absolutely strict even if I am only trying out an idea for debugging.
 
 My workflow is to just write my code the way I currently feel and that execute the phpstan and the fix scripts before
-commiting and pushing the code. There is a [highly opiniated blogpost](https://tomasvotruba.com/blog/2019/06/24/do-you-use-php-codesniffer-and-php-cs-fixer-phpstorm-plugin-you-are-slow-and-expensive/)
+committing and pushing the code. There is a [highly opiniated blogpost](https://tomasvotruba.com/blog/2019/06/24/do-you-use-php-codesniffer-and-php-cs-fixer-phpstorm-plugin-you-are-slow-and-expensive/)
 discussing that topic further. That you can read. But in the end it boils down to what you are most comfortable with.
 
 [<< previous](03-error-handler.md) | [next >>](05-http.md)

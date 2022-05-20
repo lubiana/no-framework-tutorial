@@ -33,8 +33,8 @@ final class Hello implements \Psr\Http\Server\RequestHandlerInterface
 ```
 
 You can see that we implement the [RequestHandlerInterface](https://github.com/php-fig/http-server-handler/blob/master/src/RequestHandlerInterface.php)
-that has a 'handle'-Method with requires a Requestobject as its parameter and returns a Responseobject. For now this is
-fine, but we may have to change our approach later. In anyway it is good to know about this interface as we will implement
+that has a 'handle'-Method with requires a Request object as its parameter and returns a Response-object. For now this is
+fine, but we may have to change our approach later. In any way it is good to know about this interface as we will implement
 it in some other parts of our application as well. In order to use that Interface we have to require it with composer:
 `composer require psr/http-server-handler`.
 
@@ -77,9 +77,9 @@ Now if you visit `http://localhost:1235/` everything should work. If not, go bac
 And of course don't forget to commit your changes.
 
 Something that still bothers me is the fact, that we do have classes for our Handlers, but the Error responses are still
-generated in the routing-matching section and not in special classes. Also we have still left some cases to chance, for
+generated in the routing-matching section and not in special classes. Also, we have still left some cases to chance, for
 example if there is an error in creating our RequestHandler class or if the call to the 'handle' function fails. We still
-have our whoopsie error-handler but i like to be more explicit in my control flow.
+have our whoopsie error-handler, but I like to be more explicit in my control flow.
 
 In order to do that we need to define some special Exceptions that we can throw and catch explicitly. Lets add a new
 Folder/Namespace to our src directory called Exceptions. And define the classes NotFound, MethodNotAllowed and
@@ -99,7 +99,7 @@ final class NotFound extends Exception{}
 
 Use that example to create a MethodNotAllowedException.php and InternalServerErrorException.php as well.
 
-After you have created those we update our Routercode to use the new Exceptions.
+After you have created those we update our Router code to use the new Exceptions.
 
 ```php
 try {

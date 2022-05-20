@@ -63,10 +63,10 @@ dispatcher gets called and the appropriate part of the switch statement will be 
 we collect any variable parameters of the route, store them in the request parameterbag and call the handler callable.
 If the route dispatcher returns a wrong value in the first entry of the routeMatch array we handle it the same as a 404.
 
-This setup might work for really small applications, but once you start adding a few routes your bootstrap file will
+This setup might work for tiny applications, but once you start adding a few routes your bootstrap file will
 quickly get cluttered. So let's move them out into a separate file.
 
-Create a new directory in you projectroot named 'config' and add a 'routes.php' file with the following content;
+Create a new directory in you project root named 'config' and add a 'routes.php' file with the following content;
 
 ```php
 <?php declare(strict_types = 1);
@@ -95,7 +95,7 @@ $dispatcher = \FastRoute\simpleDispatcher($routeDefinitionCallback);
 
 This is already an improvement, but now all the handler code is in the `routes.php` file. This is not optimal, so let's fix that in the next part.
 
-Of course we now need to add the 'config' folder to the configuration files of our
-devhelpers so that they can scan that directory as well.
+Of course, we now need to add the 'config' folder to the configuration files of our
+dev helpers so that they can scan that directory as well.
 
 [<< previous](05-http.md) | [next >>](07-dispatching-to-a-class.md)
