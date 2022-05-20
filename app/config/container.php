@@ -1,37 +1,23 @@
 <?php declare(strict_types=1);
 
-return new class () implements \Psr\Container\ContainerInterface {
+use DI\ContainerBuilder;
+use FastRoute\Dispatcher;
+use Laminas\Diactoros\Response;
+use Laminas\Diactoros\ServerRequestFactory;
+use Lubian\NoFramework\Service\Time\Clock;
+use Lubian\NoFramework\Service\Time\SystemClock;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
-    private readonly array $services;
+use function FastRoute\simpleDispatcher;
 
-    public function __construct()
-    {
-        $this->services = [
-            \Psr\Http\Message\ServerRequestInterface::class => fn () => \Laminas\Diactoros\ServerRequestFactory::fromGlobals(),
-            \Psr\Http\Message\ResponseInterface::class => fn () => new \Laminas\Diactoros\Response(),
-            \FastRoute\Dispatcher::class => fn () => \FastRoute\simpleDispatcher(require __DIR__ . '/routes.php'),
-            \Lubian\NoFramework\Service\Time\Clock::class => fn () => new \Lubian\NoFramework\Service\Time\SystemClock(),
-            \Lubian\NoFramework\Action\Hello::class => fn () => new \Lubian\NoFramework\Action\Hello(
-                $this->get(\Psr\Http\Message\ResponseInterface::class),
-                $this->get(\Lubian\NoFramework\Service\Time\Clock::class)
-            ),
-            \Lubian\NoFramework\Action\Other::class => fn () => new \Lubian\NoFramework\Action\Other(
-                $this->get(\Psr\Http\Message\ResponseInterface::class)
-            ),
-        ];
-    }
+$builder = new ContainerBuilder;
 
-    public function get(string $id)
-    {
-        if (! $this->has($id)) {
-            throw new class () extends \Exception implements \Psr\Container\NotFoundExceptionInterface {
-            };
-        }
-        return $this->services[$id]();
-    }
+$builder->addDefinitions([
+    ServerRequestInterface::class => fn () => ServerRequestFactory::fromGlobals(),
+    ResponseInterface::class => fn () => new Response,
+    Dispatcher::class => fn () => simpleDispatcher(require __DIR__ . '/routes.php'),
+    Clock::class => fn () => new SystemClock,
+]);
 
-    public function has(string $id): bool
-    {
-        return array_key_exists($id, $this->services);
-    }
-};
+return $builder->build();
