@@ -4,10 +4,11 @@ namespace Lubian\NoFramework;
 
 use FastRoute\Dispatcher;
 use Laminas\Diactoros\Response;
-use Laminas\Diactoros\ServerRequestFactory;
 use Lubian\NoFramework\Exception\InternalServerError;
 use Lubian\NoFramework\Exception\MethodNotAllowed;
 use Lubian\NoFramework\Exception\NotFound;
+use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Throwable;
 use Whoops\Handler\PrettyPageHandler;
@@ -16,7 +17,6 @@ use Whoops\Run;
 use function assert;
 use function error_log;
 use function error_reporting;
-use function FastRoute\simpleDispatcher;
 use function getenv;
 use function header;
 use function sprintf;
@@ -43,12 +43,15 @@ if ($environment === 'dev') {
 
 $whoops->register();
 
-$request = ServerRequestFactory::fromGlobals();
-$response = new Response;
+$container = require __DIR__ . '/../config/container.php';
+assert($container instanceof ContainerInterface);
 
+$request = $container->get(ServerRequestInterface::class);
+assert($request instanceof ServerRequestInterface);
 
-$routeDefinitionCallback = require __DIR__ . '/../config/routes.php';
-$dispatcher = simpleDispatcher($routeDefinitionCallback);
+$dispatcher = $container->get(Dispatcher::class);
+assert($dispatcher instanceof Dispatcher);
+
 
 $routeInfo = $dispatcher->dispatch($request->getMethod(), $request->getUri() ->getPath(),);
 
@@ -56,7 +59,7 @@ try {
     switch ($routeInfo[0]) {
         case Dispatcher::FOUND:
             $className = $routeInfo[1];
-            $handler = new $className($response);
+            $handler = $container->get($className);
             assert($handler instanceof RequestHandlerInterface);
             foreach ($routeInfo[2] as $attributeName => $attributeValue) {
                 $request = $request->withAttribute($attributeName, $attributeValue);

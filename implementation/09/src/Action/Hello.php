@@ -9,8 +9,10 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class Hello implements RequestHandlerInterface
 {
-    public function __construct(private readonly ResponseInterface $response, private readonly Clock $clock)
-    {
+    public function __construct(
+        private readonly ResponseInterface $response,
+        private readonly Clock $clock
+    ) {
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -18,7 +20,8 @@ final class Hello implements RequestHandlerInterface
         $name = $request->getAttribute('name', 'Stranger');
         $body = $this->response->getBody();
 
-        $time = $this->clock->now()->format('H:i:s');
+        $time = $this->clock->now()
+            ->format('H:i:s');
 
         $body->write('Hello ' . $name . '!<br />');
         $body->write('The Time is: ' . $time);

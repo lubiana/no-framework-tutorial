@@ -1,9 +1,23 @@
 <?php declare(strict_types=1);
 
-$response = new \Laminas\Diactoros\Response();
-$clock = new \Lubian\NoFramework\Service\Time\SystemClock();
+use DI\ContainerBuilder;
+use FastRoute\Dispatcher;
+use Laminas\Diactoros\Response;
+use Laminas\Diactoros\ServerRequestFactory;
+use Lubian\NoFramework\Service\Time\Clock;
+use Lubian\NoFramework\Service\Time\SystemClock;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
-return [
-    \Lubian\NoFramework\Action\Hello::class => fn () => new \Lubian\NoFramework\Action\Hello($response, $clock),
-    \Lubian\NoFramework\Action\Other::class => fn () => new \Lubian\NoFramework\Action\Other($response),
-];
+use function FastRoute\simpleDispatcher;
+
+$builder = new ContainerBuilder;
+
+$builder->addDefinitions([
+    ServerRequestInterface::class => fn () => ServerRequestFactory::fromGlobals(),
+    ResponseInterface::class => fn () => new Response,
+    Dispatcher::class => fn () => simpleDispatcher(require __DIR__ . '/routes.php'),
+    Clock::class => fn () => new SystemClock,
+]);
+
+return $builder->build();
