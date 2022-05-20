@@ -2,6 +2,7 @@
 
 namespace Lubian\NoFramework\Action;
 
+
 use Lubian\NoFramework\Service\Time\Clock;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -9,7 +10,10 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class Hello implements RequestHandlerInterface
 {
-    public function __construct(private readonly ResponseInterface $response, private readonly Clock $clock)
+    public function __construct(
+        private readonly ResponseInterface $response,
+        private readonly Clock $clock
+    )
     {
     }
 

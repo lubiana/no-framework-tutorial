@@ -59,7 +59,7 @@ try {
     switch ($routeInfo[0]) {
         case Dispatcher::FOUND:
             $className = $routeInfo[1];
-            $handler = $container->get($className);
+            $handler = new $className($response);
             assert($handler instanceof RequestHandlerInterface);
             foreach ($routeInfo[2] as $attributeName => $attributeValue) {
                 $request = $request->withAttribute($attributeName, $attributeValue);
