@@ -52,7 +52,6 @@ assert($request instanceof ServerRequestInterface);
 $dispatcher = $container->get(Dispatcher::class);
 assert($dispatcher instanceof Dispatcher);
 
-
 $routeInfo = $dispatcher->dispatch($request->getMethod(), $request->getUri() ->getPath(),);
 
 try {

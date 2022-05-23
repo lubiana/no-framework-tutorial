@@ -16,7 +16,6 @@ we can later configure and switch our implementation.
 We need a new 'Service\Time' namespace, so lets first create the folder in our 'src' directory 'src/Service/Time'.
 There we place a Clock.php interface and a SystemClock.php implementation:
 
-
 The Clock.php interface:
 ```php
 <?php declare(strict_types=1);
@@ -28,6 +27,9 @@ interface Clock
     public function now(): \DateTimeImmutable;
 }
 ```
+
+The Clock interface is modelled after the [proposed clock interface psr](https://github.com/php-fig/fig-standards/blob/master/proposed/clock.md)
+which may or may not one day be accepted as an official standard.
 
 The SystemClock.php implementation:
 ```php
@@ -94,7 +96,7 @@ great blogpost about that topic, which I highly recommend.
 
 Lets build our own Dependency Injector to make our application work again.
 
-As a starting point we are going to take a look at the [Container Interface])(https://www.php-fig.org/psr/psr-11/) that
+As a starting point we are going to take a look at the [Container Interface](https://www.php-fig.org/psr/psr-11/) that
 is widely adopted in the PHP-World.
 
 #### Building a dependency container
@@ -103,7 +105,7 @@ is widely adopted in the PHP-World.
 is needed for modern php development I will take a shortcut here and implement very reduced version to show you the
 basic concept.*
 
-The `Pst\Container\ContainerIterface` defines two methods:
+The `Psr\Container\ContainerIterface` defines two methods:
 
 * has($id): bool
     returns true if the container can provide a value for a given ID
@@ -209,7 +211,7 @@ when asking for the ResponseInterface and the Clock-Interface. We would need to 
 was smart enough to automatically figure our which services to Inject by looking at the constructor of a class.
 
 PHP provides us with the great Reflection Api that is capable of showing us, [what arguments a constructor of any
-given class requires](https://www.php.net/manual/de/reflectionclass.getconstructor.php]. We could implement that
+given class requires](https://www.php.net/manual/de/reflectionclass.getconstructor.php). We could implement that
 functionality ourselves, or just try to use a library that takes care of that for us.
 
 You can query the composer database to find all [libraries that implement the container interface](https://packagist.org/providers/psr/container-implementation).
