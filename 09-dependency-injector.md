@@ -212,7 +212,7 @@ PHP provides us with the great Reflection Api that is capable of showing us, [wh
 given class requires](https://www.php.net/manual/de/reflectionclass.getconstructor.php]. We could implement that
 functionality ourselves, or just try to use a library that takes care of that for us.
 
-You can query the composer database to find all [libraries that implment the container interface](https://packagist.org/providers/psr/container-implementation).
+You can query the composer database to find all [libraries that implement the container interface](https://packagist.org/providers/psr/container-implementation).
 
 I choose the [PHP-DI](https://packagist.org/packages/php-di/php-di) container, as it is easy to configure and provides some very [powerfull features](https://php-di.org/#autowiring) 
 out of the box, and also solves the auto wiring problem.
@@ -222,7 +222,6 @@ automatically build.
 
 ```php
 <?php declare(strict_types=1);
-
 
 $builder = new \DI\ContainerBuilder;
 
