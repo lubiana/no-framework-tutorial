@@ -121,7 +121,6 @@ the container-interface.
 In this class we will configure all services required for our application and make them accessible via the get($id)
 method.
 
-p
 Before we can implement the interface we need to install its definition with composer `composer require "psr/container:^1.0"`.
 now we can create a file with a Class that implements that interface.
 
