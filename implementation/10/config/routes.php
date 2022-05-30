@@ -3,10 +3,10 @@
 use FastRoute\RouteCollector;
 use Lubian\NoFramework\Action\Hello;
 use Lubian\NoFramework\Action\Other;
-use Psr\Http\Message\ResponseInterface as RI;
+use Psr\Http\Message\ResponseInterface;
 
 return function (RouteCollector $r) {
     $r->addRoute('GET', '/hello[/{name}]', Hello::class);
     $r->addRoute('GET', '/other', [Other::class, 'handle']);
-    $r->addRoute('GET', '/', fn (RI $r) => $r->withStatus(302)->withHeader('Location', '/hello'));
+    $r->addRoute('GET', '/', fn (ResponseInterface $r) => $r->withHeader('Location', '/hello') ->withStatus(302));
 };

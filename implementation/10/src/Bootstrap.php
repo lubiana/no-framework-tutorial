@@ -11,7 +11,6 @@ use Lubian\NoFramework\Exception\NotFound;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 use Throwable;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
@@ -59,12 +58,15 @@ $routeInfo = $dispatcher->dispatch($request->getMethod(), $request->getUri() ->g
 try {
     switch ($routeInfo[0]) {
         case Dispatcher::FOUND:
+            $routeTarget = $routeInfo[1];
+            $args = $routeInfo[2];
             foreach ($routeInfo[2] as $attributeName => $attributeValue) {
                 $request = $request->withAttribute($attributeName, $attributeValue);
             }
-            $routeInfo[2]['request'] = $request;
-            assert($container instanceof InvokerInterface);
-            $response = $container->call($routeInfo[1], $routeInfo[2]);
+            $args['request'] = $request;
+            $invoker = $container->get(InvokerInterface::class);
+            assert($invoker instanceof InvokerInterface);
+            $response = $invoker->call($routeTarget, $args);
             assert($response instanceof ResponseInterface);
             break;
         case Dispatcher::METHOD_NOT_ALLOWED:

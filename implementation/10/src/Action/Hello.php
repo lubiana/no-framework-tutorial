@@ -11,8 +11,7 @@ final class Hello
         ResponseInterface $response,
         Clock $clock,
         string $name = 'Stranger'
-    ): ResponseInterface
-    {
+    ): ResponseInterface {
         $body = $response->getBody();
 
         $body->write('Hello ' . $name . '!<br />');
