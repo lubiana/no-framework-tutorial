@@ -50,7 +50,7 @@ namespace Lubian\NoFramework\Template;
 interface Renderer
 {
     /** @param array<string, mixed> $data */
-    public function render(string $template, array $data = []) : string;
+    public function render(string $template, array $data = []): string;
 }
 ```
 
@@ -146,91 +146,14 @@ we can then use it in the factory.
 In your project root folder, create a `templates` folder. In there, create a file `hello.html`. The content of the file should look like this:
 
 ```
-<h1>Hello World</h1>
-Hello {{ name }}
+<h1>Hello {{name}}</h1>
+<p>The time is: {{time}}</p>
 ```
 
 Now you can go back to your `Hello` action and change the render line to `$html = $this->renderer->render('hello', $data);`
 
 Navigate to the hello page in your browser to make sure everything works.
 
-One thing that still bothers me is the fact that we have some configuration paths scattered in our dependencies
-file. We could add a simple valueobject to our code that gives us a typesafe access to our configuration
-values.
-
-Lets create a 'Settings' class in our './src' Folder:
-
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace Lubian\NoFramework;
-
-final class Settings
-{
-    public function __construct(
-        public readonly string $environment,
-        public readonly string $templateDir,
-        public readonly string $templateExtension,
-    ){}
-}
-```
-
-I am using a new Feature from PHP 8.1 here called [readonly properties](https://stitcher.io/blog/php-81-readonly-properties) to write a small valueobject without the need to write complex getters and setters. The linked article gives a great explanation on how they work.
-
-When creating an instance of the setting class with my project specific values i will use another
-new feature called [named arguments](https://stitcher.io/blog/php-8-named-arguments). There is 
-a lot of discussion on the topic of named arguments as some argue it creates unclean and
-unmaintainable code, but vor simple valueobjects i would argue that they are ok.
-
-here is a small example of creating a settings object using named arguments.
-```php
-    $setting = new Settings(
-        environment: getenv('ENVIRONMENT') ?: 'dev',
-        templateDir: getenv('TEMPLATE_DIR') ?: __DIR__ . '/../templates',
-        templateExtension: getenv('TEMPLATE_EXTENSION') ?: '.html',
-    );
-```
-
-lets put that code in a file called settings.php in our config folder, and return the settings object
-from there
-
-Here is my updated dependencies.php with some imports and aliases added for my convenience:
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use DI\ContainerBuilder;
-use Laminas\Diactoros\Response;
-use Laminas\Diactoros\ServerRequestFactory;
-use Lubian\NoFramework\Settings;
-use Lubian\NoFramework\Template\Mustache;
-use Lubian\NoFramework\Template\Renderer;
-use Mustache_Engine as ME;
-use Mustache_Loader_FilesystemLoader as MLFsl;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use function DI\create;
-
-$builder = new ContainerBuilder();
-$builder->addDefinitions([
-    Settings::class => fn () => require __DIR__ '/settings.php',
-    ResponseInterface::class => create(Response::class),
-    ServerRequestInterface::class => fn () => ServerRequestFactory::fromGlobals(),
-    Renderer::class => fn (ME $me) => new Mustache($me),
-    MLFsl::class => fn (Settings $s) => new MLFsl($s->templateDir, ['extension' => $s->templateExtension]),
-    ME::class => fn (MLFsl $MLFsl) => new ME(['loader' => $MLFsl]),
-]);
-
-return $builder->build();
-```
-
-
-
-And as always, don't forget to commit your changes.
-
+Before you move on to the next chapter be sure to run our quality tools and commit your changes.
 
 [<< previous](10-invoker.md) | [next >>](12-configuration.md)
