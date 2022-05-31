@@ -2,32 +2,32 @@
 
 ## Data Repository
 
-At the end of the last chapter I mentioned being unhappy with our Pages action, because there is to much stuff happening
-there. We are firstly receiving some Arguments, then we are using those to query the filesytem for the given page,
+At the end of the last chapter I mentioned being unhappy with our Pages action, because there is too much stuff happening
+there. We are firstly receiving some Arguments, then we are using those to query the filesystem for the given page,
 loading the specific file from the filesystem, rendering the markdown, passing the markdown to the template renderer,
 adding the resulting html to the response and then returning the response.
 
-In order to make our pageaction independent from the filesystem and move the code that is responsible for reading the
+In order to make our page-action independent of the filesystem and move the code that is responsible for reading the
 files
 to a better place I want to introduce
 the [Repository Pattern](https://designpatternsphp.readthedocs.io/en/latest/More/Repository/README.html).
 
-I want to start by creating a class that represents the Data that is included in a page so that. For now I can spot
+I want to start by creating a class that represents the Data that is included in a page so that. For now, I can spot
 three
-distrinct attributes.
+distinct attributes.
 
-* the ID (or chapternumber)
+* the ID (or chapter-number)
 * the title (or name)
 * the content
 
-Currently all those properties are always available, but we might later be able to create new pages and store them, but
+Currently, all those properties are always available, but we might later be able to create new pages and store them, but
 at that point in time we are not yet aware of the new available ID, so we should leave that property nullable. This
 allows
-us to create an object without an id and let the code that actually saves the object to a persistant store define a
+us to create an object without an id and let the code that actually saves the object to a persistent store define a
 valid
 id on saving.
 
-Lets create an new Namespace called `Model` and put a `MarkdownPage.php` class in there:
+Let's create an new Namespace called `Model` and put a `MarkdownPage.php` class in there:
 
 ```php
 <?php declare(strict_types=1);
@@ -48,12 +48,12 @@ class MarkdownPage
 These small Model classes are one of my most favorite features in newer PHP-Versions, because they are almost as easy
 to create as an on-the-fly array but give us the great benefit of type safety as well as full code completion in our
 IDEs.
-There is a [great blogpost](https://stitcher.io/blog/evolution-of-a-php-object) that highlights how these kind of
+There is a [great blogpost](https://stitcher.io/blog/evolution-of-a-php-object) that highlights how this kind of
 objects
 have evolved in PHP from version 5.6 to 8.1, as I personally first started writing proper php with 5.4 it really baffles
 me how far the language has evolved in these last years.
 
-Next we can define our interface for the repository, for our current usecase I see only two needed methods:
+Next we can define our interface for the repository, for our current use case I see only two needed methods:
 
 * get all pages
 * get one page by name
@@ -183,7 +183,7 @@ return new Settings(
 );
 ```
 
-Of course we need to define the correct implementation for the container to choose when we are requesting the Repository
+Of course, we need to define the correct implementation for the container to choose when we are requesting the Repository
 interface:
 `conf/dependencies.php`
 

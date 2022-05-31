@@ -2,7 +2,7 @@
 
 ### Adding Content
 
-By now we did not really display anything but some examples to in our application and it is now time to make our app
+By now we did not really display anything but some examples to in our application, and it is now time to make our app
 display some content. For example we could our app be able to display the Markdown files used in this tutorial as
 nicely rendered HTML Pages that can be viewed in the browser instead of the editor you are using.
 
@@ -15,7 +15,7 @@ can use whatever you like.
 
 After installing Parsedown lets write a Markdownparser interface and an implementation using parsedown.
 
-We only need one function that receives a string of Markdown and returns the HTML represantion (as a string as well).
+We only need one function that receives a string of Markdown and returns the HTML representation (as a string as well).
 
 
 
@@ -30,8 +30,8 @@ interface MarkdownParser
 }
 ```
 
-By the namespace you will already have guessed that I called placed in interface in a file calles MarkdownParser.php in
-the src/Template folder. Lets put our Parsedown implementation right next to it in a file called ParsedownParser.php
+By the namespace you will already have guessed that I placed in interface in a file calles MarkdownParser.php in
+the src/Template folder. Let's put our Parsedown implementation right next to it in a file called ParsedownParser.php
 
 ```php
 <?php declare(strict_types=1);
@@ -55,7 +55,7 @@ final class ParsedownRenderer implements MarkdownParser
 
 We could now use the ParsedownRender class directly in our actions by typehinting the classname as an argument to the
 constructor or a method, but as we always want to rely on an interface instead of an implementation we need to define
-the the ParsedownRenderer as the correct implementation for the MarkdownRenderer interface in the dependencies file:
+the ParsedownRenderer as the correct implementation for the MarkdownRenderer interface in the dependencies file:
 
 ```php
 ...
@@ -129,10 +129,10 @@ those are simply displayed using an unordered list.
 
 The second templates displays a single rendered markdown page. As data it expects the title and the content as array.
 I used an extra bracket for the content ```{{{content}}}``` so that the Mustache-Renderer does not escape the provided
-html and thereby destroys the the parsed markdown.
+html and thereby destroys the parsed markdown.
 
 You might have spotted that I added [Pico.css](https://picocss.com/) which is just a very small css framework to make the
-pages a little bit nicer to look at. It mostly provides some typography styles that work great with rendered Markdown,
+pages a little nicer to look at. It mostly provides some typography styles that work great with rendered Markdown,
 but you can leave that out or use any other css framework you like. There is also some Javascript that adds syntax
 highlighting to the code.
 
@@ -145,7 +145,7 @@ function show(string $name): \Psr\Http\Message\ResponseInterface;
 function list(): \Psr\Http\Message\ResponseInterface;
 ```
 
-Lets define two routes. `/page` should display the overview of all pages, and if the add the name of chapter to the
+Let's define two routes. `/page` should display the overview of all pages, and if the add the name of chapter to the
 route, `/page/adding-content` for example, the show action should be called with the name as a variable:
 
 `config/routes.php`
@@ -154,7 +154,7 @@ $r->addRoute('GET', '/page', [Page::class, 'list']);
 $r->addRoute('GET', '/page/{page}', [Page::class, 'show']);
 ```
 
-Here is my Implementation. If have added a little regex replacement in the show method that replaces the links to the
+Here is my Implementation. I have added a little regex replacement in the show method that replaces the links to the
 next and previous chapter so that it works with our routing configuration.
 
 `src/Action/Page.php`
@@ -244,9 +244,9 @@ class Page
 You can now navigate your Browser to [localhost:1235/page][http://localhost:1235/page] and try out if everything works.
 
 Of course this code is far from looking good. We heavily rely on the pages being files in the filesystem, and the action
-should never be aware of the filesystem in the first place, also we have a lot of string replacements and other repetetive
-code in the file. And phpstan is gonna scream at us a lot, but if we rewrite the code to satisfy all the checks we would
-add even more lines to that simple class, so lets move on to the next chapter where we move all the logic to seperate
+should never be aware of the filesystem in the first place, also we have a lot of string replacements and other repetitive
+code in the file. And phpstan is going to scream at us a lot, but if we rewrite the code to satisfy all the checks we would
+add even more lines to that simple class, so lets move on to the next chapter where we move all the logic to separate
 classes following our holy SOLID principles :)
 
 
